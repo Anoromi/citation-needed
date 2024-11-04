@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-serif {
+  font-family: "Alegreya", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.font-sans {
+  font-family: "Roboto", sans-serif, serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+:root {
+  --light--foreground: 52, 52, 52;
+  --light--surface: 248, 248, 248;
+  --light--background: 246, 244, 244;
+  --light--primary: 222, 222, 222;
+  --light--emphasis: 238, 238, 238;
+  --light--foreground-variant: 104, 104, 104;
+
+  font-size: 16px;
+
+  --foreground: var(--light--foreground);
+  --surface: var(--light--surface);
+  --background: var(--light--background);
+  --primary: var(--light--primary);
+  --emphaisis: var(--light--emphasis);
+  --foreground-variant: var(--light--foreground-variant);
+
+  background: rgba(var(--background), 1);
+  color: rgba(var(--foreground), 1);
+}
+
