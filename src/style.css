@@ -29,22 +29,23 @@ body,
 
 :root {
   --light--foreground: 52, 52, 52;
+  --light--foreground-variant: 104, 104, 104;
   --light--surface: 248, 248, 248;
   --light--background: 246, 244, 244;
-  --light--primary: 222, 222, 222;
+  --light--primary: 72, 72, 72;
+  --light--primary-foreground: 214, 214, 214;
   --light--emphasis: 238, 238, 238;
-  --light--foreground-variant: 104, 104, 104;
 
   font-size: 16px;
 
   --foreground: var(--light--foreground);
+  --foreground-variant: var(--light--foreground-variant);
   --surface: var(--light--surface);
   --background: var(--light--background);
   --primary: var(--light--primary);
-  --emphaisis: var(--light--emphasis);
-  --foreground-variant: var(--light--foreground-variant);
+  --primary-foreground: var(--light--primary-foreground);
+  --emphasis: var(--light--emphasis);
 
   background: rgba(var(--background), 1);
   color: rgba(var(--foreground), 1);
 }
-
