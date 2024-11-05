@@ -22,8 +22,9 @@ main {
 
 .page {
   max-width: 60rem;
-  margin: 0 0.5rem;
+  padding: 0 0.5rem;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
