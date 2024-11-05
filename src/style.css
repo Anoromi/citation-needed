@@ -35,6 +35,8 @@ body,
   --light--primary: 72, 72, 72;
   --light--primary-foreground: 214, 214, 214;
   --light--emphasis: 238, 238, 238;
+  --light--error: 185, 0, 0;
+  --light--error-foreground: 245, 243, 243;
 
   font-size: 16px;
 
@@ -45,6 +47,8 @@ body,
   --primary: var(--light--primary);
   --primary-foreground: var(--light--primary-foreground);
   --emphasis: var(--light--emphasis);
+  --error: var(--light--error);
+  --error-foreground: var(--light--error-foreground);
 
   background: rgba(var(--background), 1);
   color: rgba(var(--foreground), 1);
