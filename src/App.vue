@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import Quotecard from './components/Quotecard.vue';
+import QuoteCard from "./components/QuoteCard.vue";
 
-
-const mockCitation =  {
-"author": "The Buddha",
-    "content": "A mind unruffled by the vagaries of fortune, from sorrow freed, from defilements cleansed, from fear liberated — this is the greatest blessing.",
-    "tags": [
-        "Wisdom"
-    ],
-    "authorSlug": "the-buddha",
-}
-
+const mockCitation = {
+  author: "The Buddha",
+  content:
+    "A mind unruffled by the vagaries of fortune, from sorrow freed, from defilements cleansed, from fear liberated — this is the greatest blessing.",
+  tags: ["Wisdom"],
+  authorSlug: "the-buddha",
+};
 </script>
 
 <template>
   <main class="font-sans">
     <article class="page">
       <h1 class="font-serif">Citation needed</h1>
-      <Quotecard :data="mockCitation"></Quotecard>
+      <QuoteCard :data="mockCitation" />
     </article>
   </main>
 </template>

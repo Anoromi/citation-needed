@@ -10,28 +10,30 @@ const props = defineProps<{
 </script>
 <template>
   <section class="citation-card">
-    <blockquote class="font-serif">{{ props.data?.content }}</blockquote>
+    <blockquote class="font-serif">
+      {{ props.data?.content }}
+    </blockquote>
     <cite class="font-serif">{{ props.data?.author }}</cite>
     <div class="button-row">
       <button
         class="text-button"
+        type="button"
         @click="
           () => {
             console.log('hello there');
           }
         "
-        type="button"
       >
         History
       </button>
       <button
         class="primary-button"
+        type="button"
         @click="
           () => {
             console.log('hello there');
           }
         "
-        type="button"
       >
         Regenerate
       </button>
