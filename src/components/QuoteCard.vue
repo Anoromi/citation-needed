@@ -1,19 +1,29 @@
 <script setup lang="ts">
+import { Quote } from "../utils/quote";
+
 const props = defineProps<{
-  data?: {
-    author: string;
-    content: string;
-    tags: string[];
-    authorSlug: string;
-  };
+  data?: Quote;
 }>();
 </script>
 <template>
   <section class="citation-card">
     <blockquote class="font-serif">
-      {{ props.data?.content }}
+      <template v-if="props.data !== undefined">
+        {{ props.data.content }}
+      </template>
+      <template v-else>
+        <span class="skeleton width-max">&nbsp;</span>
+        <br />
+        <span class="skeleton width-max">&nbsp;</span>
+        <br />
+      </template>
     </blockquote>
-    <cite class="font-serif">{{ props.data?.author }}</cite>
+    <cite class="font-serif">
+      <template v-if="props.data !== undefined">
+        {{ props.data?.author }}
+      </template>
+      <span v-else class="skeleton" style="width: 8rem">&nbsp;</span>
+    </cite>
     <div class="button-row">
       <button
         class="text-button"
@@ -47,7 +57,10 @@ const props = defineProps<{
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
-  max-width: 38rem;
+
+  @media screen and (min-width: 600px) {
+    width: 38rem;
+  }
 }
 
 .citation-card blockquote {
@@ -108,5 +121,27 @@ const props = defineProps<{
 
 .primary-button:active {
   background: rgba(var(--primary), 0.8);
+}
+
+@keyframes skeleton-vibration {
+  0% {
+    background: rgba(var(--primary), 0.05);
+  }
+
+  100% {
+    background: rgba(var(--primary), 0.2);
+  }
+}
+
+.skeleton {
+  display: inline-block;
+  animation: skeleton-vibration 2s linear 0s infinite both alternate;
+  font-size: 0.8em;
+  margin: 0.1em 0;
+  border-radius: 0.4rem;
+}
+
+.width-max {
+  width: 100%;
 }
 </style>
