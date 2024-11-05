@@ -15,6 +15,15 @@ body,
   height: 100%;
 }
 
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
 .font-serif {
   font-family: "Alegreya", serif;
   font-optical-sizing: auto;
