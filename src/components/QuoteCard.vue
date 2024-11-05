@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { Quote } from "../utils/quote";
+import Button from "./ui/Button.vue";
 
 const props = defineProps<{
   data?: Quote;
+const emit = defineEmits<{
+  (name: "refresh"): void;
+  (name: "history"): void;
 }>();
 </script>
 <template>
@@ -24,29 +28,18 @@ const props = defineProps<{
       </template>
       <span v-else class="skeleton" style="width: 8rem">&nbsp;</span>
     </cite>
-    <div class="button-row">
-      <button
+    <div v-if="props.variant === 'extended'" class="button-row">
+      <Button
         class="text-button"
         type="button"
-        @click="
-          () => {
-            console.log('hello there');
-          }
-        "
+        variant="text"
+        @click="emit('history')"
       >
         History
-      </button>
-      <button
-        class="primary-button"
-        type="button"
-        @click="
-          () => {
-            console.log('hello there');
-          }
-        "
-      >
+      </Button>
+      <Button class="primary-button" type="button" @click="emit('refresh')">
         Regenerate
-      </button>
+      </Button>
     </div>
   </section>
 </template>
@@ -74,6 +67,7 @@ const props = defineProps<{
   color: rgba(var(--foreground-variant), 1);
   display: block;
   margin-top: 0.8rem;
+  margin-block: 1rem;
 }
 
 .button-row {
@@ -82,45 +76,8 @@ const props = defineProps<{
   width: 100%;
   align-items: center;
   column-gap: 0.5rem;
-}
 
-.text-button {
-  padding: 0.8rem 1rem;
-  border-radius: 1rem;
-  font-size: 1rem;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  transition: background ease-out 100ms;
-  font-weight: 700;
-}
-
-.text-button:hover {
-  background: rgba(var(--primary), 0.2);
-}
-
-.text-button:active {
-  background: rgba(var(--primary), 0.1);
-}
-
-.primary-button {
-  padding: 0.8rem 1rem;
-  border-radius: 1rem;
-  font-size: 1rem;
-  background: rgba(var(--primary), 1);
-  color: rgba(var(--primary-foreground), 1);
-  border: none;
-  transition: background ease-out 100ms;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.primary-button:hover {
-  background: rgba(var(--primary), 0.9);
-}
-
-.primary-button:active {
-  background: rgba(var(--primary), 0.8);
+  margin-top: auto;
 }
 
 @keyframes skeleton-vibration {
