@@ -4,13 +4,21 @@ import Button from "./ui/Button.vue";
 
 const props = defineProps<{
   data?: Quote;
+  variant: "short" | "extended";
+}>();
+
 const emit = defineEmits<{
   (name: "refresh"): void;
   (name: "history"): void;
 }>();
 </script>
 <template>
-  <section class="citation-card">
+  <section
+    class="citation-card"
+    :class="{
+      'citation-card-extended': props.variant === 'extended',
+    }"
+  >
     <blockquote class="font-serif">
       <template v-if="props.data !== undefined">
         {{ props.data.content }}
@@ -50,10 +58,18 @@ const emit = defineEmits<{
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
 
   @media screen and (min-width: 600px) {
     width: 38rem;
   }
+}
+
+.citation-card-extended {
+  min-height: 14rem;
 }
 
 .citation-card blockquote {
