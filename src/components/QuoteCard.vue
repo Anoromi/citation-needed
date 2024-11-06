@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { Quote } from "../utils/quote";
+import useDelayed from "../utils/useDelayed";
 import Button from "./ui/Button.vue";
+import CopyButton from "./ui/CopyButton.vue";
 
 const props = defineProps<{
   data?: Quote;
@@ -11,6 +14,11 @@ const emit = defineEmits<{
   (name: "refresh"): void;
   (name: "history"): void;
 }>();
+
+function extractText() {
+  if (props.data === undefined) return undefined;
+  return `"${props.data.content}" - ${props.data.author}`;
+}
 </script>
 <template>
   <section
@@ -19,17 +27,20 @@ const emit = defineEmits<{
       'citation-card-extended': props.variant === 'extended',
     }"
   >
-    <blockquote class="font-serif">
-      <template v-if="props.data !== undefined">
-        {{ props.data.content }}
-      </template>
-      <template v-else>
-        <span class="skeleton width-max">&nbsp;</span>
-        <br />
-        <span class="skeleton width-max">&nbsp;</span>
-        <br />
-      </template>
-    </blockquote>
+    <div class="quote-row">
+      <blockquote class="font-serif">
+        <template v-if="props.data !== undefined">
+          {{ props.data.content }}
+        </template>
+        <template v-else>
+          <span class="skeleton width-max">&nbsp;</span>
+          <br />
+          <span class="skeleton width-max">&nbsp;</span>
+          <br />
+        </template>
+      </blockquote>
+      <CopyButton :generate-text="extractText" />
+    </div>
     <cite class="font-serif">
       <template v-if="props.data !== undefined">
         {{ props.data?.author }}
@@ -72,10 +83,17 @@ const emit = defineEmits<{
   min-height: 14rem;
 }
 
+.quote-row {
+  display: flex;
+  align-items: start;
+  column-gap: 1rem;
+}
+
 .citation-card blockquote {
   font-size: 1.5rem;
   font-weight: normal;
   margin: 0;
+  flex-grow: 1;
 }
 
 .citation-card cite {
