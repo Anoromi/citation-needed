@@ -6,6 +6,8 @@ import Button from "./ui/Button.vue";
 import CopyButton from "./ui/CopyButton.vue";
 import QuoteInputs from "./QuoteInputs.vue";
 import { RandomQuoteParams } from "../utils/useQuote";
+import TelegramIcon from "./icons/TelegramIcon.vue";
+import { generateTelegramLink } from "../utils/generateLink";
 
 const props = defineProps<{
   data?: Quote;
@@ -29,6 +31,10 @@ const optionRowStyles = computed(() => ({
   height: height.value + "px",
 }));
 const model = defineModel<RandomQuoteParams>();
+const telegramShareUrl = computed(() => {
+  if (props.data === undefined) return undefined;
+  return generateTelegramLink(`"${props.data.content}" - ${props.data.author}`);
+});
 </script>
 <template>
   <section
@@ -37,6 +43,17 @@ const model = defineModel<RandomQuoteParams>();
       'citation-card-extended': props.variant === 'extended',
     }"
   >
+    <div class="share-row">
+      <a
+        :href="telegramShareUrl"
+        variant="text"
+        class="share-link"
+      >
+        <TelegramIcon width="24px" height="24px">
+          Share on telegram
+        </TelegramIcon>
+      </a>
+    </div>
     <div v-if="props.loading || props.data !== undefined" class="quote-row">
       <div class="quote-citation">
         <blockquote class="font-serif">
@@ -110,6 +127,25 @@ const model = defineModel<RandomQuoteParams>();
 
 .citation-card-extended .quote-citation {
   min-height: 10rem;
+}
+
+.share-row {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-right: 0.6rem;
+}
+
+.share-link {
+  font-size: 1rem;
+  display: inline-block;
+  padding: 0.4rem 0.4rem;
+  height: min-content;
+  transition: all 400ms ease-out;
+}
+
+.share-link:hover {
+  fill: blue;
 }
 
 .quote-row {
