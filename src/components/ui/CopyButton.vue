@@ -54,6 +54,7 @@ function copy() {
   outline: rgba(var(--primary), 1) solid 1px;
   transition: opacity ease-out 0.4s;
   right: 0;
+  font-weight: 500;
 }
 
 .invisible-copied-message {
