@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { ButtonHTMLAttributes } from "vue";
+import { AnchorHTMLAttributes, ButtonHTMLAttributes } from "vue";
 
 type ButtonVariants = "primary" | "text" | "error";
 
@@ -9,11 +9,15 @@ const props = withDefaults(
     variant?: ButtonVariants;
     type?: ButtonHTMLAttributes["type"];
     class?: string;
+    href?: AnchorHTMLAttributes["href"];
+    asLink?: boolean;
   }>(),
   {
     variant: "primary",
     type: undefined,
     class: undefined,
+    href: undefined,
+    asLink: false,
   },
 );
 
@@ -23,7 +27,8 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <button
+  <component
+    :is="asLink ? 'a' : 'button'"
     v-bind="props"
     :class="{
       [props.class ?? '']: true,
@@ -32,10 +37,11 @@ const emit = defineEmits<{
       'text-button': props.variant === 'text',
       'error-button': props.variant === 'error',
     }"
-    @click="(e) => emit('click', e)"
+    :href="href"
+    @click="(e: MouseEvent) => emit('click', e)"
   >
     <slot />
-  </button>
+  </component>
 </template>
 
 <style lang="css" scoped>
@@ -48,6 +54,7 @@ const emit = defineEmits<{
   cursor: pointer;
   transition: background ease-out 100ms;
   font-weight: 700;
+  text-decoration-line: none;
 }
 
 .text-button:hover {
