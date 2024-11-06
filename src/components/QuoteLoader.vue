@@ -1,10 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import useQuoteService from "../utils/useQuoteApi";
+import { ref, watch } from "vue";
+import useQuote from "../utils/useQuote";
 import QuoteCard from "./QuoteCard.vue";
 import Button from "./ui/Button.vue";
+import { useQuoteList } from "../utils/useQuoteList";
+import QuoteList from "./QuoteList.vue";
 
-const quoteService = useQuoteService();
+const quoteService = useQuote();
+const quoteListService = useQuoteList();
+
+watch(quoteService.quote, (newQuote) => {
+  if (newQuote === undefined) return;
+  quoteListService.save(newQuote);
+});
+
 const showHistory = ref(false);
 </script>
 <template>
@@ -13,12 +22,13 @@ const showHistory = ref(false);
     :data="quoteService.quote.value"
     variant="extended"
     @refresh="quoteService.refresh()"
-    @history="showHistory = true"
+    @history="showHistory = !showHistory"
   />
   <div v-else class="error">
     <div class="error-message">An error occurred during loading</div>
     <Button variant="error" @click="quoteService.refresh()">Try again</Button>
   </div>
+  <QuoteList v-if="showHistory"/>
 </template>
 
 <style scoped>
