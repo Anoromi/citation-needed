@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { computed, ref } from "vue";
 import { Quote } from "../utils/quote";
+import useComponentHeight from "../utils/useComponentHeight";
 import Button from "./ui/Button.vue";
 import CopyButton from "./ui/CopyButton.vue";
+import QuoteInputs from "./QuoteInputs.vue";
+import { RandomQuoteParams } from "../utils/useQuote";
 
 const props = defineProps<{
   data?: Quote;
+  loading: boolean;
   variant: "short" | "extended";
 }>();
 
@@ -17,6 +22,13 @@ function extractText() {
   if (props.data === undefined) return undefined;
   return `"${props.data.content}" - ${props.data.author}`;
 }
+
+const showOptions = ref(false);
+const { height } = useComponentHeight("options-panel", showOptions);
+const optionRowStyles = computed(() => ({
+  height: height.value + "px",
+}));
+const model = defineModel<RandomQuoteParams>();
 </script>
 <template>
   <section
@@ -25,39 +37,58 @@ function extractText() {
       'citation-card-extended': props.variant === 'extended',
     }"
   >
-    <div class="quote-row">
-      <blockquote class="font-serif">
-        <template v-if="props.data !== undefined">
-          {{ props.data.content }}
-        </template>
-        <template v-else>
-          <span class="skeleton width-max">&nbsp;</span>
-          <br />
-          <span class="skeleton width-max">&nbsp;</span>
-          <br />
-        </template>
-      </blockquote>
+    <div v-if="props.loading || props.data !== undefined" class="quote-row">
+      <div class="quote-citation">
+        <blockquote class="font-serif">
+          <template v-if="!props.loading">
+            {{ props.data!.content }}
+          </template>
+          <template v-else>
+            <span class="skeleton width-max">&nbsp;</span>
+            <br />
+            <span class="skeleton width-max">&nbsp;</span>
+            <br />
+          </template>
+        </blockquote>
+        <cite class="font-serif">
+          <template v-if="props.data !== undefined">
+            {{ props.data?.author }}
+          </template>
+          <span v-else class="skeleton" style="width: 8rem">&nbsp;</span>
+        </cite>
+      </div>
       <CopyButton :generate-text="extractText" />
     </div>
-    <cite class="font-serif">
-      <template v-if="props.data !== undefined">
-        {{ props.data?.author }}
-      </template>
-      <span v-else class="skeleton" style="width: 8rem">&nbsp;</span>
-    </cite>
-    <div v-if="props.variant === 'extended'" class="button-row">
-      <Button
-        class="text-button"
-        type="button"
-        variant="text"
-        @click="emit('history')"
+    <div v-else class="not-found">Didn't find any quote</div>
+    <form
+      v-if="props.variant === 'extended'"
+      class="content"
+      @submit.prevent="emit('refresh')"
+    >
+      <div class="button-row">
+        <Button
+          class="more-button"
+          variant="text"
+          type="button"
+          @click="showOptions = !showOptions"
+        >
+          Options
+        </Button>
+        <Button type="button" variant="text" @click="emit('history')">
+          History
+        </Button>
+        <Button type="submit"> Regenerate </Button>
+      </div>
+      <div
+        v-if="model !== undefined"
+        :style="optionRowStyles"
+        class="options-panel"
       >
-        History
-      </Button>
-      <Button class="primary-button" type="button" @click="emit('refresh')">
-        Regenerate
-      </Button>
-    </div>
+        <div ref="options-panel" class="options-content">
+          <QuoteInputs v-model="model"></QuoteInputs>
+        </div>
+      </div>
+    </form>
   </section>
 </template>
 
@@ -77,8 +108,8 @@ function extractText() {
   }
 }
 
-.citation-card-extended {
-  min-height: 14rem;
+.citation-card-extended .quote-citation {
+  min-height: 10rem;
 }
 
 .quote-row {
@@ -87,19 +118,33 @@ function extractText() {
   column-gap: 1rem;
 }
 
+.quote-citation {
+  flex-grow: 1;
+}
+
 .citation-card blockquote {
   font-size: 1.5rem;
   font-weight: normal;
   margin: 0;
-  flex-grow: 1;
 }
 
 .citation-card cite {
   font-size: 1.2rem;
   color: rgba(var(--foreground-variant), 1);
   display: block;
-  margin-top: 0.8rem;
+  margin-top: 0.2rem;
   margin-block: 1rem;
+}
+
+.content {
+  display: contents;
+}
+
+.not-found {
+  margin: 1rem 0rem;
+  font-weight: bold;
+  color: rgba(var(--error), 1);
+  font-size: 1.2rem;
 }
 
 .button-row {
@@ -108,8 +153,11 @@ function extractText() {
   width: 100%;
   align-items: center;
   column-gap: 0.5rem;
-
   margin-top: auto;
+}
+
+.more-button {
+  margin-right: auto;
 }
 
 @keyframes skeleton-vibration {
@@ -120,6 +168,16 @@ function extractText() {
   100% {
     background: rgba(var(--primary), 0.2);
   }
+}
+
+.options-panel {
+  overflow: hidden;
+  transition: height 200ms ease-out;
+}
+
+.options-content {
+  height: auto;
+  padding: 0.5rem 0;
 }
 
 .skeleton {

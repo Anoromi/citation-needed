@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import useQuote from "../utils/useQuote";
+import useQuote, { RandomQuoteParams } from "../utils/useQuote";
 import QuoteCard from "./QuoteCard.vue";
 import Button from "./ui/Button.vue";
 import { useQuoteList } from "../utils/useQuoteList";
@@ -15,20 +15,29 @@ watch(quoteService.quote, (newQuote) => {
 });
 
 const showHistory = ref(false);
+
+const inputs = ref<RandomQuoteParams>({
+  maxLength: null as number | null,
+  tags: null as string | null,
+});
 </script>
 <template>
   <QuoteCard
     v-if="quoteService.status.value !== 'error'"
+    v-model="inputs"
     :data="quoteService.quote.value"
     variant="extended"
-    @refresh="quoteService.refresh()"
+    :loading="quoteService.status.value === 'loading'"
+    @refresh="quoteService.refresh(inputs)"
     @history="showHistory = !showHistory"
   />
   <div v-else class="error">
     <div class="error-message">An error occurred during loading</div>
-    <Button variant="error" @click="quoteService.refresh()">Try again</Button>
+    <Button variant="error" @click="quoteService.refresh(inputs)"
+      >Try again</Button
+    >
   </div>
-  <QuoteList v-if="showHistory"/>
+  <QuoteList v-if="showHistory" />
 </template>
 
 <style scoped>

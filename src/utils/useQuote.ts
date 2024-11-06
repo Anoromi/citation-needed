@@ -1,5 +1,6 @@
 import { computed, ref, watchEffect } from "vue";
 import { Quote } from "./quote";
+import { generateURLParams } from "../components/geterateUrlParams";
 
 const quotateAPI = import.meta.env.VITE_QUOTE_API;
 
@@ -13,16 +14,38 @@ const data = ref<
   | undefined
 >(undefined);
 
-async function findRandom() {
+export type RandomQuoteParams = {
+  maxLength: number | null;
+  tags: string | null;
+};
+
+async function find(params: RandomQuoteParams | undefined) {
   const id = ++data.value!.requestId;
   data.value!.quote = undefined;
   data.value!.status = "loading";
   await new Promise((res) => setTimeout(res, 1000));
+  const urlParams =
+    params !== undefined
+      ? generateURLParams<RandomQuoteParams>(
+          ["tags", params.tags],
+          ["maxLength", params.maxLength?.toString()],
+        ).toString()
+      : "";
+
   try {
-    const v = await fetch(`${quotateAPI}/random`, {
+    const response = await fetch(`${quotateAPI}/random?${urlParams}`, {
       mode: "cors",
     });
-    const result = await v.json();
+
+    if(response.status === 404) {
+      data.value!.quote = undefined
+      data.value!.status = "resolved"
+      return;
+    }
+
+    const result = await response.json();
+
+
     const quote = {
       id: result.id,
       tags: result.tags,
@@ -32,7 +55,7 @@ async function findRandom() {
     if (id === data.value!.requestId) {
       data.value!.quote = quote;
       data.value!.status = "resolved";
-      return quote;
+      return;
     }
   } catch (e: any) {
     if (id === data.value!.requestId) {
@@ -43,6 +66,7 @@ async function findRandom() {
 
   return null;
 }
+
 export default function () {
   watchEffect(() => {
     if (data.value === undefined) {
@@ -50,7 +74,7 @@ export default function () {
         requestId: 0,
         status: "loading",
       };
-      findRandom();
+      find(undefined);
     }
   });
 
@@ -58,6 +82,6 @@ export default function () {
     quote: computed(() => data.value?.quote),
     error: computed(() => data.value?.error),
     status: computed(() => data.value?.status),
-    refresh: findRandom,
+    refresh: find,
   };
 }
