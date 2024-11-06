@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import QuoteLoader from "./components/QuoteLoader.vue";
-
 </script>
 
 <template>
@@ -23,11 +22,16 @@ main {
 .page {
   max-width: 60rem;
   padding: 0 0.5rem;
+  padding-bottom: 5rem;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.page > * {
+  flex-shrink: 0;
 }
 
 h1 {
