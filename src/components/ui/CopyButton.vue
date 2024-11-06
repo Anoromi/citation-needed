@@ -11,10 +11,6 @@ const { runWithTimeout } = useDelayed();
 const showCopiedMessage = ref(false);
 
 function copy() {
-  //if (props.data === undefined) return;
-  //navigator.clipboard.writeText(
-  //  `"${props.data.content}" - ${props.data.author}`,
-  //);
   const text = props.generateText();
   if (text === undefined) {
     return;

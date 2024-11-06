@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { Quote } from "../utils/quote";
-import useDelayed from "../utils/useDelayed";
 import Button from "./ui/Button.vue";
 import CopyButton from "./ui/CopyButton.vue";
 
