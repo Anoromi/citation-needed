@@ -32,8 +32,9 @@ const optionRowStyles = computed(() => ({
 }));
 const model = defineModel<RandomQuoteParams>();
 const telegramShareUrl = computed(() => {
-  if (props.data === undefined) return undefined;
-  return generateTelegramLink(`"${props.data.content}" - ${props.data.author}`);
+  const text = extractText();
+  if (text === undefined) return undefined;
+  return generateTelegramLink(text);
 });
 </script>
 <template>
@@ -44,11 +45,7 @@ const telegramShareUrl = computed(() => {
     }"
   >
     <div class="share-row">
-      <a
-        :href="telegramShareUrl"
-        variant="text"
-        class="share-link"
-      >
+      <a :href="telegramShareUrl" variant="text" class="share-link">
         <TelegramIcon width="24px" height="24px">
           Share on telegram
         </TelegramIcon>
@@ -56,23 +53,23 @@ const telegramShareUrl = computed(() => {
     </div>
     <div v-if="props.loading || props.data !== undefined" class="quote-row">
       <div class="quote-citation">
-        <blockquote class="font-serif">
-          <template v-if="!props.loading">
-            {{ props.data!.content }}
-          </template>
-          <template v-else>
+        <Transition name="quote" mode="out-in">
+          <span v-if="!props.loading">
+            <blockquote class="font-serif">
+              {{ props.data!.content }}
+            </blockquote>
+            <cite class="font-serif">
+              {{ props.data!.author }}
+            </cite>
+          </span>
+          <span v-else>
             <span class="skeleton width-max">&nbsp;</span>
             <br />
             <span class="skeleton width-max">&nbsp;</span>
             <br />
-          </template>
-        </blockquote>
-        <cite class="font-serif">
-          <template v-if="props.data !== undefined">
-            {{ props.data?.author }}
-          </template>
-          <span v-else class="skeleton" style="width: 8rem">&nbsp;</span>
-        </cite>
+            <span class="skeleton" style="width: 8rem">&nbsp;</span>
+          </span>
+        </Transition>
       </div>
       <CopyButton :generate-text="extractText" />
     </div>
@@ -146,6 +143,30 @@ const telegramShareUrl = computed(() => {
 
 .share-link:hover {
   fill: blue;
+}
+
+.quote-enter-from {
+  opacity: 0;
+}
+
+.quote-enter-to {
+  opacity: 1;
+}
+
+.quote-enter-active {
+  transition: opacity 200ms ease-out;
+}
+
+.quote-leave-from {
+  opacity: 1;
+}
+
+.quote-leave-to {
+  opacity: 0;
+}
+
+.quote-leave-active {
+  transition: opacity 200ms ease-out;
 }
 
 .quote-row {

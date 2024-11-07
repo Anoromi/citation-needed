@@ -37,7 +37,11 @@ const inputs = ref<RandomQuoteParams>({
       >Try again</Button
     >
   </div>
-  <QuoteList v-if="showHistory" />
+  <Transition name="quote-list-wrapper" appear>
+    <div v-if="showHistory">
+      <QuoteList />
+    </div>
+  </Transition>
 </template>
 
 <style scoped>
@@ -63,4 +67,25 @@ const inputs = ref<RandomQuoteParams>({
   font-size: 1.2rem;
   font-weight: 500;
 }
+
+.quote-list-wrapper-enter-active,
+.quote-list-wrapper-leave-active {
+  transition: opacity 300ms ease-out;
+}
+
+.quote-list-wrapper-enter-from,
+.quote-list-wrapper-leave-to {
+  opacity: 0;
+}
+
+.quote-list-wrapper-leave-from,
+.quote-list-wrapper-enter-to {
+  opacity: 1;
+}
+
+/* .quote-list-wrapper-enter-from, */
+/* .quote-list-wrapper-leave-to { */
+/*   transform: translateX(20px); */
+/*   opacity: 0; */
+/* } */
 </style>
