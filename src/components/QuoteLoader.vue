@@ -82,10 +82,4 @@ const inputs = ref<RandomQuoteParams>({
 .quote-list-wrapper-enter-to {
   opacity: 1;
 }
-
-/* .quote-list-wrapper-enter-from, */
-/* .quote-list-wrapper-leave-to { */
-/*   transform: translateX(20px); */
-/*   opacity: 0; */
-/* } */
 </style>

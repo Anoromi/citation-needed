@@ -1,4 +1,4 @@
-import { computed, ref, shallowRef, toRaw, watch } from "vue";
+import { computed, shallowRef, toRaw } from "vue";
 import { Quote } from "./quote";
 
 const quotesStorageKey = "quotes";

@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { computed, watchEffect } from "vue";
+import { computed } from "vue";
 import { RandomQuoteParams } from "../utils/useQuote";
 
 const model = defineModel<RandomQuoteParams>({
   required: true,
 });
 
-watchEffect(() => {
-  console.log(model.value);
-});
 const tagInput = computed({
   get: () => model.value.tags,
   set: (v) => (model.value.tags = v),
